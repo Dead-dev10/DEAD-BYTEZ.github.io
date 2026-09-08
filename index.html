@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEAD BYTEZ | Cyberpunk NFT Collection</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Konfigurasi Tema Tailwind Cyberpunk -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rhc-green': '#00FF66',     /* Hijau Neon terang */
+                        'rhc-dark': '#09090b',      /* Latar gelap */
+                        'rhc-gray': '#1a1a24',      /* Abu-abu panel */
+                    },
+                    fontFamily: {
+                        'display': ['"Orbitron"', 'sans-serif'],
+                        'mono': ['"Share Tech Mono"', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #d1d5db;
+            /* Efek Grid Cyberpunk */
+            background-image: 
+                linear-gradient(rgba(0, 255, 102, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 102, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            overflow-x: hidden;
+        }
+
+        /* Teks Neon */
+        .neon-text {
+            color: #00FF66;
+            text-shadow: 0 0 5px rgba(0, 255, 102, 0.5), 0 0 20px rgba(0, 255, 102, 0.3);
+        }
+
+        /* Panel Kaca Cyber */
+        .cyber-panel {
+            background: rgba(26, 26, 36, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.05);
+            transition: all 0.3s ease;
+        }
+        .cyber-panel:hover {
+            border-color: #00FF66;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.2), inset 0 0 10px rgba(0, 255, 102, 0.1);
+        }
+
+        /* ANIMASI BINGKAI BERGERAK (Melayang & Glow) */
+        .cyber-frame-animated {
+            animation: cyber-float 4s ease-in-out infinite;
+        }
+        @keyframes cyber-float {
+            0% {
+                transform: translateY(0px);
+                box-shadow: 0 0 15px rgba(0, 255, 102, 0.1);
+                border-color: rgba(0, 255, 102, 0.2);
+            }
+            50% {
+                transform: translateY(-12px);
+                box-shadow: 0 0 35px rgba(0, 255, 102, 0.5), inset 0 0 15px rgba(0, 255, 102, 0.2);
+                border-color: #00FF66;
+            }
+            100% {
+                transform: translateY(0px);
+                box-shadow: 0 0 15px rgba(0, 255, 102, 0.1);
+                border-color: rgba(0, 255, 102, 0.2);
+            }
+        }
+
+        /* Tombol Cyberpunk */
+        .cyber-btn {
+            background: rgba(0, 255, 102, 0.1);
+            color: #00FF66;
+            border: 1px solid #00FF66;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+        .cyber-btn:hover {
+            background: #00FF66;
+            color: #000;
+            box-shadow: 0 0 15px #00FF66;
+        }
+        .cyber-btn-alt {
+            background: transparent;
+            color: #d1d5db;
+            border: 1px solid #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s ease;
+        }
+        .cyber-btn-alt:hover {
+            border-color: #00FF66;
+            color: #00FF66;
+        }
+
+        /* Animasi Marquee */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            background-color: #00FF66;
+            padding: 8px 0;
+            white-space: nowrap;
+            position: relative;
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #000;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-mono selection:bg-rhc-green selection:text-black">
+
+    <div class="scanlines"></div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full z-50 bg-rhc-dark/90 backdrop-blur-md border-b border-rhc-green/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <img src="logo.png" alt="Dead Bytez Logo" class="h-10 md:h-12 object-contain">
+            </a>
+            
+            <div class="hidden md:flex gap-8 text-sm tracking-widest text-gray-400">
+                <a href="#about" class="hover:text-rhc-green transition-colors">SYS.LORE</a>
+                <a href="#showcase" class="hover:text-rhc-green transition-colors">SYS.GALLERY</a>
+                <a href="#utilities" class="hover:text-rhc-green transition-colors">SYS.PERKS</a>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://x.com/ByteBotsRh" target="_blank" class="w-10 h-10 border border-gray-600 flex items-center justify-center text-gray-400 hover:border-rhc-green hover:text-rhc-green hover:shadow-[0_0_10px_#00FF66] transition-all">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 min-h-screen">
+        <div class="w-full md:w-1/2 space-y-6 z-10">
+            <div class="inline-block border border-rhc-green text-rhc-green px-3 py-1 text-xs tracking-widest bg-rhc-green/10">
+                STATUS: NETWORK CORRUPTED
+            </div>
+            <h1 class="text-5xl md:text-7xl font-display font-bold leading-tight text-white uppercase">
+                WELCOME TO <br> <span class="neon-text">DEADBYTEZ</span>
+            </h1>
+            <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
+                A forgotten city. A corrupted network. And 10,000 digital outcasts who refuse to disappear.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                <a href="#" class="cyber-btn py-3 px-8 text-center font-bold flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bolt"></i> INITIATE MINT
+                </a>
+                <a href="#" class="cyber-btn-alt py-3 px-8 text-center font-bold">
+                    MARKETPLACE
+                </a>
+            </div>
+
+            <div class="mt-8 cyber-panel p-4 flex items-center justify-around">
+                <div class="text-center">
+                    <p class="text-gray-500 text-xs tracking-widest">TOTAL BYTES</p>
+                    <p class="font-display text-2xl text-white mt-1">10,000</p>
+                </div>
+                <div class="w-px h-10 bg-rhc-green/30"></div>
+                <div class="text-center">
+                    <p class="text-gray-500 text-xs tracking-widest">MINT PRICE</p>
+                    <p class="font-display text-2xl neon-text mt-1">0.000031 ETH</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 flex justify-center z-10">
+            <div class="relative cyber-panel p-2 rounded-lg cyber-frame-animated">
+                <!-- Aksen sudut Cyberpunk -->
+                <div class="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-rhc-green"></div>
+                <div class="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-rhc-green"></div>
+                
+                <!-- Gambar Utama (Hero) -->
+                <img src="DEAD_BYTEZ_5.png" alt="Dead Bytez Preview" class="w-full max-w-md object-cover bg-rhc-gray" style="image-rendering: pixelated;">
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            // NO RULES. NO MASTERS. JUST BYTES. // 10,000 DIGITAL OUTCASTS // A CORRUPTED NETWORK // DEADBYTEZ // INFINITE STORIES // ROBIN HOOD CHAIN // 
+        </div>
+    </div>
+
+    <!-- ABOUT SECTION (LORE) -->
+    <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+        <div class="cyber-panel p-8 md:p-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="fa-solid fa-ghost text-9xl text-rhc-green"></i>
+            </div>
+            
+            <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-6 uppercase border-b border-rhc-green/30 pb-4 inline-block">
+                SYSTEM.<span class="neon-text">LORE</span>
+            </h2>
+            
+            <div class="text-gray-300 space-y-5 leading-relaxed relative z-10">
+                <p class="text-xl text-white font-bold tracking-wide">Welcome to the DEADBYTEZ.</p>
+                <p>A forgotten city. A corrupted network. And 10,000 digital outcasts who refuse to disappear.</p>
+                <p>DEADBYTEZ is a pixel-art NFT collection inspired by dystopian streets, cyberpunk culture, mutants, undead rebels, and the chaos of a broken digital world.</p>
+                <p>Every Byte has its own identity — from ruthless street punks and mysterious reapers to corrupted mutants and neon outlaws.</p>
+                
+                <div class="mt-8 p-6 border border-rhc-green/30 bg-rhc-green/5 text-center">
+                    <p class="text-white font-bold tracking-widest uppercase">No rules. No masters. Just Bytes.</p>
+                    <p class="text-gray-400 mt-4 font-display">10,000 unique characters.<br>One corrupted city.<br>Infinite stories.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOWCASE (GALLERY) - FULL 27 ITEMS -->
+    <section id="showcase" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="flex justify-between items-end border-b border-rhc-green/30 pb-4 mb-10">
+            <h2 class="text-3xl md:text-4xl font-display font-bold text-white uppercase">DATABASE.<span class="neon-text">PREVIEW</span></h2>
+            <p class="text-gray-500 text-sm hidden md:block tracking-widest">LOADING 27 ASSETS...</p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Menampilkan seluruh 27 item -->
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0s;">
+                <img src="DEAD_BYTEZ_1.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #001</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.5s;">
+                <img src="DEAD_BYTEZ_2.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #002</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1s;">
+                <img src="DEAD_BYTEZ_3.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #003</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.5s;">
+                <img src="DEAD_BYTEZ_4.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #004</div>
+            </div>
+            
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.2s;">
+                <img src="DEAD_BYTEZ_5.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #005</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.7s;">
+                <img src="DEAD_BYTEZ_6.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #006</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.2s;">
+                <img src="DEAD_BYTEZ_7.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #007</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.7s;">
+                <img src="DEAD_BYTEZ_8.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #008</div>
+            </div>
+
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.4s;">
+                <img src="DEAD_BYTEZ_9.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #009</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.9s;">
+                <img src="DEAD_BYTEZ_10.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #010</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.4s;">
+                <img src="DEAD_BYTEZ_11.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #011</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.9s;">
+                <img src="DEAD_BYTEZ_12.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #012</div>
+            </div>
+            
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.1s;">
+                <img src="DEAD_BYTEZ_13.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #013</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.6s;">
+                <img src="DEAD_BYTEZ_14.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #014</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.1s;">
+                <img src="DEAD_BYTEZ_15.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #015</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.6s;">
+                <img src="DEAD_BYTEZ_16.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #016</div>
+            </div>
+            
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.3s;">
+                <img src="DEAD_BYTEZ_17.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #017</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.8s;">
+                <img src="DEAD_BYTEZ_18.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #018</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.3s;">
+                <img src="DEAD_BYTEZ_19.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #019</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.8s;">
+                <img src="DEAD_BYTEZ_20.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #020</div>
+            </div>
+
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.5s;">
+                <img src="DEAD_BYTEZ_21.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #021</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.0s;">
+                <img src="DEAD_BYTEZ_22.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #022</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.5s;">
+                <img src="DEAD_BYTEZ_23.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #023</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 2.0s;">
+                <img src="DEAD_BYTEZ_24.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #024</div>
+            </div>
+            
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.2s;">
+                <img src="DEAD_BYTEZ_25.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #025</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 0.7s;">
+                <img src="DEAD_BYTEZ_26.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #026</div>
+            </div>
+            <div class="cyber-panel p-2 cyber-frame-animated" style="animation-delay: 1.2s;">
+                <!-- Kotak terakhir untuk gambar ke-27 Anda -->
+                <img src="DEAD_BYTEZ_27.png" class="w-full aspect-square object-cover" style="image-rendering: pixelated;">
+                <div class="p-2 text-center text-xs tracking-widest mt-2 border-t border-rhc-green/20 text-rhc-green">BYTE #027</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- UTILITIES -->
+    <section id="utilities" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-display font-bold text-white uppercase border-b border-rhc-green/30 pb-4 mb-10 inline-block">
+            MODULES.<span class="neon-text">UTILITY</span>
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="cyber-panel p-8">
+                <div class="text-4xl text-rhc-green mb-6">
+                    <i class="fa-solid fa-copyright"></i>
+                </div>
+                <h3 class="text-xl font-display font-bold text-white mb-2 uppercase">IP Rights</h3>
+                <p class="text-gray-400 text-sm">Full commercial rights to your Byte. Build your own tech empire.</p>
+            </div>
+            
+            <div class="cyber-panel p-8">
+                <div class="text-4xl text-rhc-green mb-6">
+                    <i class="fa-solid fa-server"></i>
+                </div>
+                <h3 class="text-xl font-display font-bold text-white mb-2 uppercase">Staking Protocol</h3>
+                <p class="text-gray-400 text-sm">Lock your Byte in the corrupted mainframe to generate ecosystem rewards.</p>
+            </div>
+            
+            <div class="cyber-panel p-8">
+                <div class="text-4xl text-rhc-green mb-6">
+                    <i class="fa-solid fa-network-wired"></i>
+                </div>
+                <h3 class="text-xl font-display font-bold text-white mb-2 uppercase">DAO Network</h3>
+                <p class="text-gray-400 text-sm">Gain administrative access to vote on the future of the forgotten city.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-rhc-green/30 mt-10 bg-[#020202]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <a href="#" class="flex items-center">
+                <img src="logo.png" alt="Dead Bytez Logo" class="h-8 md:h-10 object-contain opacity-80 hover:opacity-100 transition-opacity">
+            </a>
+            
+            <p class="text-gray-500 text-xs tracking-widest text-center md:text-left">
+                ROBIN HOOD CHAIN NETWORK // CONNECTION SECURE
+            </p>
+            
+            <div class="flex gap-4">
+                <a href="https://x.com/ByteBotsRh" target="_blank" class="text-gray-500 hover:text-rhc-green transition-colors text-xl">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+        <div class="bg-black py-4 text-center text-xs tracking-widest text-gray-600">
+            &copy; 2026 DEAD BYTEZ. ALL SYSTEMS NOMINAL.
+        </div>
+    </footer>
+
+</body>
+</html>
